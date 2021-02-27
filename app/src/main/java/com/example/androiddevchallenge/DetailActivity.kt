@@ -15,9 +15,7 @@
  */
 package com.example.androiddevchallenge
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -38,20 +36,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
-var callbackOnClicked : (String) -> Unit = { }
-
-class MainActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        callbackOnClicked = {
-            val i = Intent(this, DetailActivity::class.java)
-            i.putExtra("name", it)
-            startActivity(i)
-        }
+        val name = intent?.getStringExtra("name") ?: ""
+
         setContent {
             MyTheme {
-                MyApp()
+                DetailApp(name)
             }
         }
     }
@@ -59,61 +52,8 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun MyApp() {
+fun DetailApp(name: String) {
     Surface(color = MaterialTheme.colors.background) {
-        LazyList(arrayListOf("tama", "taro", "shiro"))
-    }
-}
-
-@Composable
-fun LazyList(data: List<String>) {
-    // We save the scrolling position with this state that can also
-    // be used to programmatically scroll the list
-    val scrollState = rememberLazyListState()
-
-    LazyColumn(state = scrollState) {
-        itemsIndexed(data) { index, item ->
-            Text(
-                "YourPet: #${index + 1} Name: $item",
-                Modifier.clickable(onClick = { callbackOnClicked(item) })
-            )
-        }
-    }
-}
-
-@Composable
-fun MessageList(messages: List<String>) {
-    Column {
-        messages.forEach { message ->
-            MessageRow(message)
-        }
-    }
-}
-
-@Composable
-fun MessageRow(message: String) {
-    Column(
-        modifier = Modifier.padding(16.dp)
-    ) {
-
-        Text(message)
-        Text("Davenport, California")
-        Text("December 2018")
-    }
-}
-
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
-
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+        Text("Hello I am $name")
     }
 }
